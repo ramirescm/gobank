@@ -49,9 +49,10 @@ func (s *APIServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/login", makeHTTPHandlerFunc(s.handleLogin)).Methods("POST")
-	router.HandleFunc("/account", makeHTTPHandlerFunc(s.handleAccount))
-	router.HandleFunc("/account/{id}", withJWTAuth(makeHTTPHandlerFunc(s.handleGetAccountById), s.store))
-	router.HandleFunc("/transfer", makeHTTPHandlerFunc(s.handleTransfer))
+	router.HandleFunc("/account", makeHTTPHandlerFunc(s.handleGetAccount)).Methods("GET")
+	router.HandleFunc("/account/{id}", withJWTAuth(makeHTTPHandlerFunc(s.handleGetAccountById), s.store)).Methods("GET")
+	router.HandleFunc("/account/{id}", makeHTTPHandlerFunc(s.handleDeleteAccount)).Methods("DELETE")
+	router.HandleFunc("/transfer", makeHTTPHandlerFunc(s.handleTransfer)).Methods("POST")
 
 	log.Println("JSON API server runing on port: ", s.listenAddr)
 	http.ListenAndServe(s.listenAddr, router)
@@ -83,22 +84,6 @@ func (s *APIServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return WriteJSON(w, http.StatusOK, resp)
-}
-
-func (s *APIServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
-	if r.Method == "GET" {
-		return s.handleGetAccount(w, r)
-	}
-
-	if r.Method == "POST" {
-		return s.handleCreateAccount(w, r)
-	}
-
-	if r.Method == "DELETE" {
-		return s.handleDeleteAccount(w, r)
-	}
-
-	return fmt.Errorf("method not allowed %v", r.Method)
 }
 
 func (s *APIServer) handleGetAccount(w http.ResponseWriter, r *http.Request) error {
