@@ -1,0 +1,20 @@
+version: "3.1"
+services:
+  db:
+    image: "postgres:13"
+    container_name: "gobank_db"
+    environment:
+      POSTGRES_PASSWORD: "gobank_pass"
+    ports:
+      - "5432:5432"
+    volumes:
+      - gobank_dbdata:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    container_name: "gobank_adminer"
+    restart: always
+    ports:
+      - 8080:8080
+volumes:
+  gobank_dbdata:
