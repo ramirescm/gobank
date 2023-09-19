@@ -50,7 +50,6 @@ func NewAccount(firstName, lastName, password string) (*Account, error) {
 	}
 
 	return &Account{
-		// ID:        int(rand.Intn(100000)),
 		FirstName:         firstName,
 		LastName:          lastName,
 		EncryptedPassword: string(encrypt),
