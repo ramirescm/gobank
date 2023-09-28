@@ -4,7 +4,9 @@ services:
     image: "postgres:13"
     container_name: "gobank_db"
     environment:
-      POSTGRES_PASSWORD: "gobank_pass"
+      POSTGRES_PASSWORD: 23092023
+      POSTGRES_USER: user
+      POSTGRES_DB: gobank
     ports:
       - "5432:5432"
     volumes:
